@@ -66,6 +66,7 @@ describe Api::V1::PostsController, type: :controller do
       expect { post(:create, params: { attributes: attributes }) }
         .to change { User.where(login: login).count }.by(0)
         .and change { Post.count }.by(1)
+        .and change { Author.count }.by(1)
 
       expect(response).to have_http_status(:ok)
       check_post(response: response)
@@ -80,6 +81,7 @@ describe Api::V1::PostsController, type: :controller do
       expect(post.id).to eq(body['id'])
       expect(post.title).to eq(body['title']).and eq(title)
       expect(post.content).to eq(body['content']).and eq(content)
+      expect(post.author.ip.to_s).to eq(body['ip']).and eq(ip)
     end
 
   end

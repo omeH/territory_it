@@ -6,7 +6,8 @@ module Api
         creator = Posts::Creator.new(attributes: permitted_attributes).create
 
         creator.on_success do
-          render json: creator.post, status: :ok
+          presenter = Posts::Presenter.new(post: creator.post)
+          render json: presenter.gather, status: :ok
         end
 
         creator.on_fail do

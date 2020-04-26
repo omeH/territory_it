@@ -4,4 +4,5 @@ en:
     title: "Title"
     content: "Content"
   record:
+    post: "Post"
     not_found: "%{record} not found: ID=%{id}"
