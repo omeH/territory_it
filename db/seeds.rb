@@ -35,9 +35,26 @@ class Seeder
 
         if url
           request_uri = URI.join(url, '/api/v1/posts')
-          send_request(uri: request_uri, data: { post: attributes })
+          send_request(uri: request_uri, data: { attributes: attributes })
         else
           Posts::Creator.new(attributes: attributes).create
+        end
+      end
+    end
+
+    part = 200 # Part of posts with rating
+    post_ids_for_rating = Post.where('id % ? = 0', part).ids
+
+    post_ids_for_rating.each do |post_id|
+      tries_count = processors * 3
+      Parallel.each(tries_count.times, in_processes: processors) do
+        value = rand(Ratings::Calculator::MIN_RATING..Ratings::Calculator::MAX_RATING)
+
+        if url
+          request_uri = URI.join(url, "/api/v1/ratings/#{post_id}")
+          send_request(uri: request_uri, method: :put, data: { value: value })
+        else
+          Ratings::Updater.new(post_id: post_id, value: value).update
         end
       end
     end
@@ -46,7 +63,7 @@ class Seeder
   private
 
   def default_counts
-    { users: 100, posts: 1_000_000, ips: 50 }
+    { users: 100, posts: 200_000, ips: 50 }
   end
 
   def ip_v4_address

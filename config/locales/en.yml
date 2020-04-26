@@ -3,3 +3,5 @@ en:
     login: "Login"
     title: "Title"
     content: "Content"
+  record:
+    not_found: "%{record} not found: ID=%{id}"
