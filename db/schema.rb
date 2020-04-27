@@ -17,9 +17,10 @@ ActiveRecord::Schema.define(version: 0) do
 
   create_table "authors", force: :cascade do |t|
     t.bigserial "post_id", null: false
+    t.bigserial "user_id", null: false
     t.inet "ip", null: false
-    t.index ["ip"], name: "author_ip_idx"
     t.index ["post_id"], name: "author_post_idx"
+    t.index ["user_id"], name: "author_user_idx"
   end
 
   create_table "posts", force: :cascade do |t|
@@ -46,5 +47,6 @@ ActiveRecord::Schema.define(version: 0) do
   end
 
   add_foreign_key "authors", "posts", name: "authors_post_id_fkey"
+  add_foreign_key "authors", "users", name: "authors_user_id_fkey"
   add_foreign_key "posts", "users", name: "posts_user_id_fkey"
 end

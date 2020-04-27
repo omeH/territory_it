@@ -5,6 +5,7 @@ Rails.application.routes.draw do
       resources :posts, only: :create
       resources :ratings, only: :update
       resources :top_ratings, only: :index
+      resources :authors, only: :index
     end
   end
 end
