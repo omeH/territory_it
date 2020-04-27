@@ -22,7 +22,7 @@ module Actions
 
     def store(request:, total:)
       Trail.create(
-        url: request.fullpath,
+        url: request.path,
         params: request.params,
         milliseconds: total
       )

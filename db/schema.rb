@@ -35,7 +35,7 @@ ActiveRecord::Schema.define(version: 0) do
   end
 
   create_table "trails", force: :cascade do |t|
-    t.string "url", limit: 50
+    t.string "url", limit: 100
     t.json "params"
     t.float "milliseconds", default: 0.0, null: false
     t.datetime "created_at"

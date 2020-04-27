@@ -7,7 +7,7 @@ describe Actions::TimeTracker do
   end
 
   it 'stores result' do
-    request = double('request', fullpath: '/fullpath', params: {})
+    request = double('request', path: '/fullpath', params: {})
     allow(described_class.instance).to receive(:enabled).and_return(true)
 
     expect { described_class.instance.track(request: request) {} }
