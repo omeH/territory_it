@@ -6,7 +6,7 @@ module Api
         updater = Ratings::Updater.new(post_id: params[:id], value: params[:value]).update
 
         updater.on_success do
-          presenter = Ratings::Presenter.new(rating: updater.rating)
+          presenter = Ratings::Presenter.new(post: updater.post)
           render json: presenter.gather, status: :ok
         end
 

@@ -1,7 +1,7 @@
 describe Posts::Presenter do
   let!(:user) { create(:user, login: 'login') }
   let!(:post) { create(:post, user: user) }
-  let!(:author) { create(:author, post: post, user: user) }
+  let!(:author) { create(:author, post: post) }
 
   it '#gather' do
     data = described_class.new(post: post).gather

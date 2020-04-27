@@ -17,29 +17,27 @@ ActiveRecord::Schema.define(version: 0) do
 
   create_table "authors", force: :cascade do |t|
     t.bigserial "post_id", null: false
-    t.bigserial "user_id", null: false
     t.inet "ip", null: false
     t.index ["ip"], name: "author_ip_idx"
+    t.index ["post_id"], name: "author_post_idx"
   end
 
   create_table "posts", force: :cascade do |t|
     t.bigserial "user_id", null: false
     t.string "title", limit: 200, null: false
     t.text "content", null: false
-  end
-
-  create_table "ratings", force: :cascade do |t|
-    t.bigserial "post_id", null: false
     t.integer "total", default: 0, null: false
     t.integer "score", default: 0, null: false
     t.float "average", default: 0.0, null: false
-    t.index ["average"], name: "rating_average_idx"
+    t.index ["average"], name: "post_average_idx"
+    t.index ["user_id"], name: "post_user_idx"
   end
 
   create_table "trails", force: :cascade do |t|
     t.string "url", limit: 50
     t.json "params"
     t.float "milliseconds", default: 0.0, null: false
+    t.datetime "created_at"
   end
 
   create_table "users", force: :cascade do |t|
@@ -48,7 +46,5 @@ ActiveRecord::Schema.define(version: 0) do
   end
 
   add_foreign_key "authors", "posts", name: "authors_post_id_fkey"
-  add_foreign_key "authors", "users", name: "authors_user_id_fkey"
   add_foreign_key "posts", "users", name: "posts_user_id_fkey"
-  add_foreign_key "ratings", "posts", name: "ratings_post_id_fkey"
 end

@@ -3,7 +3,7 @@ require 'ratings/calculator'
 module Ratings
   class Updater
 
-    attr_accessor :rating, :errors
+    attr_accessor :post, :errors
     attr_reader :post_id, :value
 
     delegate :on_success, :on_fail, to: :@handler
@@ -17,13 +17,13 @@ module Ratings
 
     def update
       ApplicationRecord.connection.transaction do
-        self.rating = Rating.lock.find_by(post_id: post_id)
+        self.post = Post.lock.find_by(id: post_id)
 
-        if rating
-          Ratings::Calculator.new(rating: rating, value: value).calculate
-          rating.save!
+        if post
+          Ratings::Calculator.new(post: post, value: value).calculate
+          post.save!
         else
-          self.errors = [I18n.t('record.not_found', record: I18n.t('post.name'), id: post_id)]
+          self.errors = [I18n.t('record.not_found', record: I18n.t('record.post'), id: post_id)]
         end
       end
 

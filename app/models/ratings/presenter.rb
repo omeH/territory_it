@@ -1,15 +1,15 @@
 module Ratings
   class Presenter
 
-    attr_reader :rating
+    attr_reader :post
 
-    def initialize(rating:)
-      @rating = rating
+    def initialize(post:)
+      @post = post
     end
 
     def gather
       {
-        rating: rating.average&.round(2)
+        rating: post.average&.round(2)
       }
     end
 

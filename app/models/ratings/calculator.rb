@@ -4,17 +4,17 @@ module Ratings
     MIN_RATING = 1
     MAX_RATING = 5
 
-    attr_reader :rating
+    attr_reader :post
 
-    def initialize(rating:, value:)
-      @rating = rating
+    def initialize(post:, value:)
+      @post = post
       @value = value
     end
 
     def calculate
-      rating.total += value
-      rating.score = rating.score.next
-      rating.average = rating.total / rating.score.to_f
+      post.total += value
+      post.score = post.score.next
+      post.average = post.total / post.score.to_f
     end
 
     def value

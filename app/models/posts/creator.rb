@@ -26,14 +26,9 @@ module Posts
       user = User.find_by(login: attributes[:login])
       user ||= User.create_or_find_by(login: attributes[:login])
 
-      author = Author.new(ip: attributes[:ip])
-      author.user = user
-      rating = Rating.new
-
       self.post = Post.new(attributes.slice(:title, :content))
       post.user = user
-      post.author = author
-      post.rating = rating
+      post.author = Author.new(ip: attributes[:ip])
 
       post.save!
 

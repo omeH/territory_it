@@ -13,7 +13,6 @@ describe Posts::Creator do
     expect { described_class.new(attributes: attributes).create }
       .to change { User.where(login: login).count }.by(1)
       .and change { Author.where(ip: ip).count }.by(1)
-      .and change { Rating.count }.by(1)
       .and change { Post.where(title: title, content: content).count }.by(1)
   end
 
@@ -24,7 +23,6 @@ describe Posts::Creator do
     expect { described_class.new(attributes: attributes).create }
       .to change { User.where(login: login).count }.by(0)
       .and change { Author.where(ip: ip).count }.by(1)
-      .and change { Rating.count }.by(1)
       .and change { Post.where(title: title, content: content).count }.by(1)
   end
 end
