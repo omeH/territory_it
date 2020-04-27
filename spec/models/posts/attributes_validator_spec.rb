@@ -29,6 +29,18 @@ describe Posts::AttributesValidator do
     expect(validator.errors).to include('IP is invalid')
   end
 
+  it 'populates login error when attribute is too long' do
+    length = described_class.constraints.dig(:login, :length)
+    validator = described_class.new(attributes: { login: 'l' * length.next }).validate
+    expect(validator.errors).to include("Login is too long (maximum is #{length} characters)")
+  end
+
+  it 'populates title error when attribute is too long' do
+    length = described_class.constraints.dig(:title, :length)
+    validator = described_class.new(attributes: { title: 't' * length.next }).validate
+    expect(validator.errors).to include("Title is too long (maximum is #{length} characters)")
+  end
+
   it 'populates ip error when attribute is invalid' do
     validator = described_class.new(attributes: { ip: '192.' }).validate
     expect(validator.errors).to include('IP is invalid')
