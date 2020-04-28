@@ -5,78 +5,14 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
-require 'ostruct'
-require 'net/http'
-require 'parallel'
+require 'seeds/seeder'
 
-class Seeder
-
-  BATCH = 1_000
-
-  attr_reader :counts, :processors, :url
-
-  def initialize(counts: nil, processors: 5, url: nil)
-    @counts = OpenStruct.new(counts || default_counts)
-    @processors = processors
-    @url = url
-  end
-
-  def generate
-    logins = (1..counts[:users]).map { |number| "login_#{number}" }
-    ips = (1..counts[:ips]).map { ip_v4_address }
-
-    Parallel.each((counts[:posts] / BATCH).times, in_processes: processors) do |step|
-      BATCH.times do |index|
-        number = step * BATCH + index
-        attributes = {
-          title: "Title #{number}", content: "Content #{number}",
-          login: logins.sample, ip: ips.sample
-        }
-
-        if url
-          request_uri = URI.join(url, '/api/v1/posts')
-          send_request(uri: request_uri, data: { attributes: attributes })
-        else
-          Posts::Creator.new(attributes: attributes).create
-        end
-      end
-    end
-
-    part = 200 # Part of posts with rating
-    post_ids_for_rating = Post.where('id % ? = 0', part).ids
-
-    post_ids_for_rating.each do |post_id|
-      tries_count = processors * 3
-      Parallel.each(tries_count.times, in_processes: processors) do
-        value = rand(Ratings::Calculator::MIN_RATING..Ratings::Calculator::MAX_RATING)
-
-        if url
-          request_uri = URI.join(url, "/api/v1/ratings/#{post_id}")
-          send_request(uri: request_uri, method: :put, data: { value: value })
-        else
-          Ratings::Updater.new(post_id: post_id, value: value).update
-        end
-      end
-    end
-  end
-
-  private
-
-  def default_counts
-    { users: 100, posts: 200_000, ips: 50 }
-  end
-
-  def ip_v4_address
-    range = 0..255
-    [rand(range), rand(range), rand(range), rand(range)].join('.')
-  end
-
-  def send_request(uri:, method: :post, data: {})
-    Net::HTTP.start(uri.hostname, uri.port) do |http|
-      http.public_send(method, uri, data.to_json, 'Content-Type' => 'application/json')
-    end
-  end
-
-end
-
-Seeder.new.generate
+Seeds::Seeder.new(
+  counts: {
+    users: ENV['RAILS_SEEDER_USERS'].to_i,
+    posts: ENV['RAILS_SEEDER_POSTS'].to_i,
+    ips: ENV['RAILS_SEEDER_IPS'].to_i,
+  },
+  processes: ENV['RAILS_SEEDER_PROCESSES'].to_i,
+  url: ENV['RAILS_SEEDER_URL']
+).generate
