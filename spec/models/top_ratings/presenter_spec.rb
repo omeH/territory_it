@@ -10,10 +10,9 @@ describe TopRatings::Presenter do
 
   it '#value' do
     expect(described_class.new.limit).to eq(described_class::MIN_LIMIT)
-    expect(described_class.new(limit: 4).limit).to eq(described_class::MIN_LIMIT)
+    expect(described_class.new(limit: -1).limit).to eq(described_class::MIN_LIMIT)
+    expect(described_class.new(limit: 0).limit).to eq(described_class::MIN_LIMIT)
+    expect(described_class.new(limit: 1).limit).to eq(described_class::MIN_LIMIT)
     expect(described_class.new(limit: 5).limit).to eq(5)
-    expect(described_class.new(limit: 100).limit).to eq(100)
-    expect(described_class.new(limit: 500).limit).to eq(500)
-    expect(described_class.new(limit: 501).limit).to eq(described_class::MAX_LIMIT)
   end
 end

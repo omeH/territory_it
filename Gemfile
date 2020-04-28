@@ -22,6 +22,9 @@ gem 'bootsnap', '>= 1.4.2', require: false
 gem 'dotenv-rails', '2.7.5'
 gem 'parallel', '1.19.1', require: false
 
+gem 'will_paginate', '3.3.0'
+gem 'api-pagination', '4.8.2'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

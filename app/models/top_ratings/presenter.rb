@@ -1,8 +1,7 @@
 module TopRatings
   class Presenter
 
-    MIN_LIMIT = 5
-    MAX_LIMIT = 500
+    MIN_LIMIT = 1
 
     attr_accessor :rating
 
@@ -17,13 +16,7 @@ module TopRatings
     end
 
     def limit
-      if @limit < MIN_LIMIT
-        MIN_LIMIT
-      elsif @limit > MAX_LIMIT
-        MAX_LIMIT
-      else
-        @limit
-      end
+      @limit.zero? || @limit.negative? ? MIN_LIMIT : @limit
     end
 
   end

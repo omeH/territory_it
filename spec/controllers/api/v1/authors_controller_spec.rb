@@ -17,8 +17,11 @@ describe Api::V1::AuthorsController, type: :controller do
 
       items = JSON.parse(response.body)
       expect(items.size).to eq(1)
-      expect(items[ip_1]).to include(user_1.login)
-      expect(items[ip_1]).to include(user_2.login)
+
+      item = items.first
+      expect(item['ip']).to eq(ip_1)
+      expect(item['logins']).to include(user_1.login)
+      expect(item['logins']).to include(user_2.login)
     end
   end
 
@@ -35,8 +38,11 @@ describe Api::V1::AuthorsController, type: :controller do
 
       items = JSON.parse(response.body)
       expect(items.size).to eq(2)
-      expect(items[ip_1]).to include(user_1.login)
-      expect(items[ip_2]).to include(user_2.login)
+
+      expect(items.first['ip']).to eq(ip_1)
+      expect(items.first['logins']).to include(user_1.login)
+      expect(items.last['ip']).to eq(ip_2)
+      expect(items.last['logins']).to include(user_2.login)
     end
   end
 

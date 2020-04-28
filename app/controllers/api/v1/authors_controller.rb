@@ -1,10 +1,12 @@
+require 'will_paginate/array'
+
 module Api
   module V1
     class AuthorsController < ApplicationController
 
       def index
         presenter = Authors::Presenter.new(logins: logins)
-        render json: presenter.gather, status: :ok
+        paginate json: presenter.gather, status: :ok
       end
 
       private

@@ -13,7 +13,7 @@ module Authors
       aggregate_clause = Arel.sql('ARRAY_AGG(DISTINCT users.login)')
       authors = relation.group(:ip).pluck(:ip, aggregate_clause)
 
-      Hash[authors.map { |ip, logins| [ip.to_s, logins] }]
+      authors.map { |ip, logins| { ip: ip.to_s, logins: logins } }
     end
 
   end
