@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(version: 0) do
   create_table "authors", force: :cascade do |t|
     t.bigserial "post_id", null: false
     t.bigserial "user_id", null: false
-    t.inet "ip", null: false
+    t.string "ip", null: false
     t.index ["post_id"], name: "author_post_idx"
     t.index ["user_id"], name: "author_user_idx"
   end
@@ -41,6 +41,12 @@ ActiveRecord::Schema.define(version: 0) do
     t.datetime "created_at"
   end
 
+  create_table "user_ips", force: :cascade do |t|
+    t.bigserial "user_id", null: false
+    t.string "ip", null: false
+    t.index ["user_id", "ip"], name: "user_ip_idx", unique: true
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "login", limit: 20, null: false
     t.index ["login"], name: "users_login_key", unique: true
@@ -49,4 +55,27 @@ ActiveRecord::Schema.define(version: 0) do
   add_foreign_key "authors", "posts", name: "authors_post_id_fkey"
   add_foreign_key "authors", "users", name: "authors_user_id_fkey"
   add_foreign_key "posts", "users", name: "posts_user_id_fkey"
+  add_foreign_key "user_ips", "users", name: "user_ips_user_id_fkey"
+
+  execute(<<-SQL)
+CREATE OR REPLACE FUNCTION add_user_ip()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO "user_ips" ("user_id", "ip")
+    VALUES (NEW.user_id, NEW.ip)
+    ON CONFLICT ("user_id", "ip") DO NOTHING;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+  SQL
+
+  execute(<<-SQL)
+CREATE TRIGGER add_author_ip
+    AFTER INSERT
+    ON authors
+    FOR EACH ROW
+EXECUTE PROCEDURE add_user_ip();
+  SQL
+
 end

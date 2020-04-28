@@ -8,12 +8,10 @@ module Authors
     end
 
     def gather
-      relation = Author.by_logins(logins)
+      relation = UserIp.by_logins(logins)
 
-      aggregate_clause = Arel.sql('ARRAY_AGG(DISTINCT users.login)')
-      authors = relation.group(:ip).pluck(:ip, aggregate_clause)
-
-      authors.map { |ip, logins| { ip: ip.to_s, logins: logins } }
+      aggregate_clause = Arel.sql('ARRAY_AGG(DISTINCT users.login) AS logins')
+      relation.select(:ip, aggregate_clause).group(:ip)
     end
 
   end
