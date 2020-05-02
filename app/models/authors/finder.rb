@@ -1,5 +1,5 @@
 module Authors
-  class Presenter
+  class Finder
 
     attr_accessor :logins
 
@@ -7,7 +7,7 @@ module Authors
       @logins = logins
     end
 
-    def gather
+    def find
       relation = UserIp.by_logins(logins)
 
       aggregate_clause = Arel.sql('ARRAY_AGG(DISTINCT users.login) AS logins')

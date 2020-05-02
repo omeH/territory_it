@@ -1,9 +1,9 @@
-describe TopRatings::Presenter do
+describe TopRatings::Finder do
   it '#gather' do
     user = create(:user, login: 'login')
     post = create(:post, user: user, average: 1.0)
 
-    posts = described_class.new.gather
+    posts = described_class.new.find
     expect(posts.size).to eq(1)
     expect(posts.first).to eq([post.title, post.content])
   end

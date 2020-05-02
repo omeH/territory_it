@@ -5,8 +5,8 @@ module Api
     class TopRatingsController < ApplicationController
 
       def index
-        presenter = TopRatings::Presenter.new(limit: params[:limit])
-        paginate json: presenter.gather, status: :ok
+        presenter = TopRatings::Finder.new(limit: params[:limit])
+        paginate json: presenter.find, status: :ok
       end
 
     end

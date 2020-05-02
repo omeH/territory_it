@@ -1,5 +1,5 @@
 module TopRatings
-  class Presenter
+  class Finder
 
     MIN_LIMIT = 1
 
@@ -9,7 +9,7 @@ module TopRatings
       @limit = limit.to_i
     end
 
-    def gather
+    def find
       Post
         .top_rating(limit)
         .pluck(:title, :content)

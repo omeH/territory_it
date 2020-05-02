@@ -3,8 +3,8 @@ module Api
     class AuthorsController < ApplicationController
 
       def index
-        presenter = Authors::Presenter.new(logins: logins)
-        paginate json: presenter.gather, except: :id, status: :ok
+        presenter = Authors::Finder.new(logins: logins)
+        paginate json: presenter.find, except: :id, status: :ok
       end
 
       private
