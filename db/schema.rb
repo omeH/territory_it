@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "total", default: 0, null: false
     t.integer "score", default: 0, null: false
     t.float "average", default: 0.0, null: false
-    t.index ["average"], name: "post_average_idx"
+    t.index ["average"], name: "post_average_idx", order: :desc
     t.index ["user_id"], name: "post_user_idx"
   end
 
