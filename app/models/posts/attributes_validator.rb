@@ -1,18 +1,16 @@
 module Posts
   class AttributesValidator
 
+    CONSTRAINTS = {
+      login: { length: 50 },
+      title: { length: 200 },
+    }.freeze
+
     attr_reader :attributes, :errors
 
     def initialize(attributes: {})
       @attributes = attributes
       @errors = []
-    end
-
-    def self.constraints
-      {
-        login: { length: 50 },
-        title: { length: 200 },
-      }.freeze
     end
 
     def validate
@@ -24,7 +22,7 @@ module Posts
           errors << "#{I18n.t('attributes.login')} #{I18n.t('errors.messages.invalid')}"
         end
 
-        length = self.class.constraints.dig(:login, :length)
+        length = CONSTRAINTS.dig(:login, :length)
         if attributes[:login].length > length
           errors << "#{I18n.t('attributes.login')} #{I18n.t('errors.messages.too_long.other', count: length)}"
         end
@@ -34,7 +32,7 @@ module Posts
         errors << "#{I18n.t('attributes.title')} #{I18n.t('errors.messages.blank')}"
       end
 
-      length = self.class.constraints.dig(:title, :length)
+      length = CONSTRAINTS.dig(:title, :length)
       if attributes[:title].present? && attributes[:title].length > length
         errors << "#{I18n.t('attributes.title')} #{I18n.t('errors.messages.too_long.other', count: length)}"
       end
