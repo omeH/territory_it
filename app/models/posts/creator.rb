@@ -1,6 +1,3 @@
-require 'actions/handler'
-require 'posts/attributes_validator'
-
 module Posts
   class Creator
 

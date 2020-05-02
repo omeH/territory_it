@@ -1,5 +1,3 @@
-require 'ratings/calculator'
-
 module Ratings
   class Updater
 
