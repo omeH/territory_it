@@ -15,8 +15,7 @@ module Posts
     end
 
     def create
-      validator.validate
-      return self if errors.any?
+      return self unless validator.valid?
 
       # Firstly we just try to find user
       # If there is no user with provided login we try to create it
